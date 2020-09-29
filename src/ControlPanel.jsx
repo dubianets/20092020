@@ -1,26 +1,39 @@
 import React, {useState} from "react";
 
-export default function (props){
+export default function (props) {
 
-    const [value, setValue] = useState("")
+    const [newTitle, setNewTitle] = useState('')
+    const [newDescription, setNewDescription] = useState('')
+    const [isAddModeOn, setIsAddModeOn] = useState(false)
 
-    const inputCounter = (event) => {
-        setValue(+(event.target.value));
+    const addNewButtonHandler = () => {
+        props.addTodo(newTitle, newDescription);
+        setNewTitle('');
+        setNewDescription('');
+        setIsAddModeOn(false);
     }
 
-    const addInputCounter = () => {
-        props.addCounter(value);
-        setValue("");
-    }
 
-    return(
-     <div>
+    return (
+        <div>
+            { !isAddModeOn &&
+            <button onClick={()=> setIsAddModeOn(!isAddModeOn)}>add new todo</button>
+            }
+            { isAddModeOn &&
+                <>
+                    <label>title:</label>
+                    <input type='text' value={newTitle} onChange={(event) => setNewTitle(event.target.value)}/>
+                    <label>description:</label>
+                    <input type='text' value={newDescription}
+                           onChange={(event) => setNewDescription(event.target.value)}/>
 
-         <button onClick={addInputCounter}>add counter</button>
-         <button onClick={()=>props.refreshAll()}>refresh all</button>
-         <input type="text" onChange={inputCounter} value={value}/>
+                    <button onClick={addNewButtonHandler}>save</button>
+
+                    <button onClick={()=> setIsAddModeOn(false)}>cancel</button>
+                </>
+            }
 
 
-     </div>
+        </div>
     )
 }
